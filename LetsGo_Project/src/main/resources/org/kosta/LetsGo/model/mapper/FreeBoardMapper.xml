@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.kosta.LetsGo.model.mapper.FreeBoardMapper">
+
+	<resultMap type="org.kosta.LetsGo.model.vo.FreeBoardVO" id="freeResultMap">
+		<result column="id" property="btMemberVO.id"/>
+		<result column="password" property="btMemberVO.password"/>
+		<result column="name" property="btMemberVO.name"/>
+		<result column="nick" property="btMemberVO.nick"/>
+		<result column="tel" property="btMemberVO.tel"/>
+		<result column="question" property="btMemberVO.question"/>
+		<result column="answer" property="btMemberVO.answer"/>
+		<result column="member_type" property="btMemberVO.memberType"/>
+		<result column="enabled" property="btMemberVO.enabled"/>
+	</resultMap>
+	
+	<select id="freeBoardTotalCount" resultType="int">
+		SELECT COUNT(*) FROM free_board
+	</select>
+	
+	<select id="findFreeBoardList" resultMap="freeResultMap" parameterType="org.kosta.LetsGo.model.vo.Pagination">
+		SELECT rnum,free_no,title,btm.nick,time_posted,hits
+		FROM(
+		SELECT row_number() over(ORDER BY free_no DESC) AS rnum,
+		free_no,title,to_char(time_posted,'YYYY.MM.DD') as time_posted,hits,id
+		FROM free_board
+		) fb
+		INNER JOIN bt_member btm ON fb.id=btm.id
+		WHERE rnum BETWEEN #{startRowNumber} AND #{endRowNumber}
+	</select>
+	<select id="freeBoardDetail" parameterType="int" resultMap="freeResultMap">
+		SELECT free_no,title,content,nick,member_type,to_char(time_posted,'YYYY.MM.DD HH24:Mi') as time_posted,hits,image
+		FROM free_board fb
+		INNER JOIN bt_member btm ON fb.id=btm.id
+		WHERE free_no=#{freeNo}
+	</select>
+	<insert id="writeFreeBoard" parameterType="org.kosta.LetsGo.model.vo.FreeBoardVO">
+		INSERT INTO free_board(free_no,title,content,image,id)
+		VALUES(free_board_seq.nextval,#{title},#{content},#{image},#{btMemberVO.id})
+	</insert>
+	<delete id="deleteFreeBoard" parameterType="int">
+		DELETE FROM free_board WHERE free_no=#{value}
+	</delete>
+	<update id="updateFreeBoard" parameterType="org.kosta.LetsGo.model.vo.FreeBoardVO">
+		UPDATE free_board SET title=#{title},content=#{content} WHERE free_no=#{freeNo}
+	</update>
+	<select id="findFreeBoardByKeyword" parameterType="map" resultMap="freeResultMap">
+		SELECT rnum,free_no,title,btm.nick,time_posted,hits
+		FROM(
+		SELECT row_number() over(ORDER BY free_no DESC) AS rnum,
+		free_no,title,to_char(time_posted,'YYYY.MM.DD') as time_posted,hits,id
+		FROM free_board WHERE title LIKE '%'|| #{KEYWORD} ||'%' 
+		) fb
+		INNER JOIN bt_member btm ON fb.id=btm.id
+		WHERE rnum BETWEEN #{PAGINATION.startRowNumber,jdbcType=INTEGER} AND #{PAGINATION.endRowNumber,jdbcType=INTEGER}
+	</select>
+	<select id="keywordTotalCount" parameterType="string" resultType="int">
+		SELECT COUNT(*) FROM free_board WHERE title LIKE '%'|| #{value} ||'%'
+	</select>
+	<update id="freeBoardHits" parameterType="int">
+		UPDATE free_board SET hits=hits+1 WHERE free_no=#{value}
+	</update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

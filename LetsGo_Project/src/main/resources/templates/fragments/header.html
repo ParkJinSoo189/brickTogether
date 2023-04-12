@@ -1,0 +1,57 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<!--/* 
+		 필요한 html 요소만 정의한다 		 
+		 th:fragment="headerFragment" 는 반드시 명시하도록 한다 
+ */-->
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <!-- Header Section Begin -->
+   <nav th:fragment="headerFragment">
+    <header class="header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="header__logo">
+                        <a href="#" th:href="@{/}"><img src="img/logo.png" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <nav class="header__menu">
+                        <ul>
+                            <li class="active"><a href="#" th:href="@{/}">Home</a></li>
+                            <li><a href="#" th:href="@{/findFreeBoardList}">자유게시판</a></li>
+                            <li><a href="#">브릭 리뷰</a></li>
+                            <li><a href="./blog.html">브릭 정보</a></li>
+                            <li><a href="./contact.html">공지사항</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-3">
+                    <div class="header__cart" style="margin-top: 3px;">
+                        <ul>
+                        	<th:block th:if="${session==null||session.mvo==null}">
+                            	<li><a href="#" th:href="@{/loginForm}"><i class="fa fa-user"></i> Login</a></li>
+                            </th:block>
+                            <th:block th:if="${session.mvo!=null}">
+                            	<form id="logoutForm" th:action="@{/logout}" method="post"></form>
+                            	<li><span th:text="|${session.mvo.nick}님|"></span></li>
+                            	<li><a href="#" th:href="@{/myPage}">MyPage</a></li>
+                            	<li><a href="#" id="logoutBtn">Logout</a></li>
+                            	<script>
+                            		$(document).ready(function() {
+                            			$("#logoutBtn").click(function() {
+                            				let result=confirm("로그아웃 하시겠습니까?")
+                            				if(result)
+                            					$("#logoutForm").submit();
+                            			});//click
+                            		});//ready
+                            	</script>
+                            </th:block>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+  </nav>
+    <!-- Header Section End -->
+</html>

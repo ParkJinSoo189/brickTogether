@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.kosta.LetsGo.model.mapper.FreeCommentMapper">
+	<resultMap type="org.kosta.LetsGo.model.vo.FreeCommentVO" id="freeCommentResultMap">
+		<result column="id" property="btMemberVO.id"/>
+		<result column="nick" property="btMemberVO.nick"/>
+		<result column="freeNo" property="freeBoardVO.freeNo"/>
+	</resultMap>
+	<select id="freeCommentListByFreeNo" parameterType="int" resultMap="freeCommentResultMap">
+		SELECT fc.rnum,fc.free_comment_no,fc.content,fc.time_posted,btm.nick,fb.free_no
+		FROM(
+		SELECT row_number() over(ORDER BY free_comment_no ASC) AS rnum,
+		free_comment_no,content,to_char(time_posted,'YYYY.MM.DD HH24:Mi') AS time_posted,id,free_no
+		FROM free_comment
+		)fc
+		INNER JOIN bt_member btm ON btm.id=fc.id
+		INNER JOIN free_board fb ON fb.free_no=fc.free_no
+	</select>
+</mapper>

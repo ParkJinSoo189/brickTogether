@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/layout}"
+> <!--/* 위 선언은 타임리프 레이아웃을 사용하기 위한 설정 : layout2.html 로 레이아웃 사용   */-->
+<head>
+<title>Brick Together</title>
+</head>
+<!--/*  
+		thymeleaf layout을 이용하므로 body tag는 명시하지 않는다
+		layouts/layout.html 의 content fragment 영역에 삽입될 부분이기 때문 
+*/-->
+<div layout:fragment="content">
+	<h2 class="bt-h2">비밀번호 확인</h2>
+	<hr>
+	<br>
+	<form th:action="@{/delete}" method="post" class="bt-form">
+		<input type="hidden" name="id" th:value=${session.mvo.id} id="deleteId">
+		<input class="form-control-lg" type="password" name="password" placeholder="비밀번호" required="required" id="deletePassword">
+		<button type="button" class="btn btn-outline-danger btn-lg bt-btn" id="deleteBtn">확인</button><br>
+	</form>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#deleteBtn").click(function() {
+				let deleteId=$("#deleteId").val().trim();
+				let deletePassword=$("#deletePassword").val().trim();
+				$.ajax({
+					type:"post",
+					url:"delete",
+					data:{"id": deleteId, "password":deletePassword},
+					success:function(result){
+						if(result=="ok"){
+							alert("회원탈퇴가 완료되었습니다.\n그동안 이용해주셔서 감사합니다!");
+							location.href="/";
+						}else{
+							alert("비밀번호가 일치하지 않습니다.\n다시 확인해주세요.")
+						}
+					}// success
+				});// ajax
+			});// click
+		});// ready
+	</script>
+</div>
+
