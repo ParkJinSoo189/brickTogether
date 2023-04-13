@@ -21,6 +21,7 @@
 		<span th:text="${freeBoardDetail.btMemberVO.memberType}">회원타입</span><br>
 		<span th:text="${freeBoardDetail.timePosted}">작성일</span>&nbsp;&nbsp;
 		<span th:text="|조회수  ${freeBoardDetail.hits}|">조회수</span>
+		
 		<th:block th:if="${session.mvo!=null&&session.mvo.nick==freeBoardDetail.btMemberVO.nick}">
 		
 		<form th:action="@{/deleteFreeBoard}" method="post" id="deleteFreeBoard">
@@ -30,12 +31,13 @@
 		<form th:action="@{/updateFreeBoardForm}" method="get" id="updateFreeBoardForm">
 		<input type="hidden" th:value="${freeBoardDetail.freeNo}" name="freeNo">
 		<button type="button" class="btn btn-secondary boardUpdate" id="updateFreeBoardBtn">수정</button></form>
+		
 		</th:block>
 		<hr>
 		<th:block th:if="${freeBoardDetail.image}!=null">
 		<img th:src="@{/images/}+${freeBoardDetail.image}"><br><br>
 		</th:block>
-		<div><p class="contentDetail" th:text="${freeBoardDetail.content}"></p></div>
+		<div class="contentDetail" th:text="${freeBoardDetail.content}"></div>
 		<hr>
 		<h5 class="comment">댓글</h5>
 		<th:block th:each="freeCommentList: ${freeCommentList}">

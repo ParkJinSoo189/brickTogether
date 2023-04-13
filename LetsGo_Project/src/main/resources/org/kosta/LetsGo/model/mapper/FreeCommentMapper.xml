@@ -6,6 +6,7 @@
 		<result column="nick" property="btMemberVO.nick"/>
 		<result column="freeNo" property="freeBoardVO.freeNo"/>
 	</resultMap>
+	
 	<select id="freeCommentListByFreeNo" parameterType="int" resultMap="freeCommentResultMap">
 		SELECT fc.rnum,fc.free_comment_no,fc.content,fc.time_posted,btm.nick,fb.free_no
 		FROM(
@@ -15,5 +16,7 @@
 		)fc
 		INNER JOIN bt_member btm ON btm.id=fc.id
 		INNER JOIN free_board fb ON fb.free_no=fc.free_no
+		WHERE fb.free_no = #{freeCommentNo}
 	</select>
+	
 </mapper>

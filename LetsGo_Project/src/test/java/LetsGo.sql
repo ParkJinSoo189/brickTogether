@@ -254,7 +254,7 @@ FROM free_comment
 )fc
 INNER JOIN bt_member btm ON btm.id=fc.id
 INNER JOIN free_board fb ON fb.free_no=fc.free_no
-
+WHERE fb.free_no = 23;
 
 
 
