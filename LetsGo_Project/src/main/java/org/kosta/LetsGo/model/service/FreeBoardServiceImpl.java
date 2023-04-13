@@ -16,7 +16,6 @@ import org.kosta.LetsGo.model.vo.FreeCommentVO;
 import org.kosta.LetsGo.model.vo.Pagination;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 
@@ -65,7 +64,7 @@ public class FreeBoardServiceImpl implements FreeBoardService{
 	}
 
 	@Override
-	public void writeFreeBoard(FreeBoardVO freeBoardVO,HttpServletRequest request,MultipartFile file) throws Exception {
+	public void writeFreeBoard(FreeBoardVO freeBoardVO,HttpServletRequest request) throws Exception {
 		HttpSession session=request.getSession(false);
 		BTMemberVO mvo=(BTMemberVO) session.getAttribute("mvo");
 		freeBoardVO.setBtMemberVO(mvo);

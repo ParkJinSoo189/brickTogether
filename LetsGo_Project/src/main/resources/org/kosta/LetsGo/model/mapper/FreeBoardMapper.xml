@@ -28,22 +28,27 @@
 		INNER JOIN bt_member btm ON fb.id=btm.id
 		WHERE rnum BETWEEN #{startRowNumber} AND #{endRowNumber}
 	</select>
+	
 	<select id="freeBoardDetail" parameterType="int" resultMap="freeResultMap">
 		SELECT free_no,title,content,nick,member_type,to_char(time_posted,'YYYY.MM.DD HH24:Mi') as time_posted,hits,image
 		FROM free_board fb
 		INNER JOIN bt_member btm ON fb.id=btm.id
 		WHERE free_no=#{freeNo}
 	</select>
+	
 	<insert id="writeFreeBoard" parameterType="org.kosta.LetsGo.model.vo.FreeBoardVO">
-		INSERT INTO free_board(free_no,title,content,image,id)
-		VALUES(free_board_seq.nextval,#{title},#{content},#{image},#{btMemberVO.id})
+		INSERT INTO free_board(free_no,title,content,id)
+		VALUES(free_board_seq.nextval,#{title},#{content},#{btMemberVO.id})
 	</insert>
+	
 	<delete id="deleteFreeBoard" parameterType="int">
 		DELETE FROM free_board WHERE free_no=#{value}
 	</delete>
+	
 	<update id="updateFreeBoard" parameterType="org.kosta.LetsGo.model.vo.FreeBoardVO">
 		UPDATE free_board SET title=#{title},content=#{content} WHERE free_no=#{freeNo}
 	</update>
+	
 	<select id="findFreeBoardByKeyword" parameterType="map" resultMap="freeResultMap">
 		SELECT rnum,free_no,title,btm.nick,time_posted,hits
 		FROM(
@@ -54,11 +59,14 @@
 		INNER JOIN bt_member btm ON fb.id=btm.id
 		WHERE rnum BETWEEN #{PAGINATION.startRowNumber,jdbcType=INTEGER} AND #{PAGINATION.endRowNumber,jdbcType=INTEGER}
 	</select>
+	
 	<select id="keywordTotalCount" parameterType="string" resultType="int">
 		SELECT COUNT(*) FROM free_board WHERE title LIKE '%'|| #{value} ||'%'
 	</select>
+	
 	<update id="freeBoardHits" parameterType="int">
 		UPDATE free_board SET hits=hits+1 WHERE free_no=#{value}
+	
 	</update>
 </mapper>
 

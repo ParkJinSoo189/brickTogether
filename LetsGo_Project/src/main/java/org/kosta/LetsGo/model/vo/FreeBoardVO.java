@@ -18,12 +18,11 @@ public class FreeBoardVO {
 	private BTMemberVO btMemberVO;
 	
 	// 자유게시판 글쓰기 시 필요한 생성자
-	public FreeBoardVO(int freeNo, String title, String content, String image, BTMemberVO btMemberVO) {
+	public FreeBoardVO(int freeNo, String title, String content, BTMemberVO btMemberVO) {
 		super();
 		this.freeNo = freeNo;
 		this.title = title;
 		this.content = content;
-		this.image = image;
 		this.btMemberVO = btMemberVO;
 	}
 

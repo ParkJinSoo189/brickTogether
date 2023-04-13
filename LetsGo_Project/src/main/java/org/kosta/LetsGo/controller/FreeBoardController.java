@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,8 +33,8 @@ public class FreeBoardController {
 	}
 	// 자유게시판 글쓰기
 	@PostMapping("writeFreeBoard")
-	public String writeFreeBoard(FreeBoardVO freeBoardVO,HttpServletRequest request,MultipartFile file) throws Exception {
-		freeBoardService.writeFreeBoard(freeBoardVO,request,file);
+	public String writeFreeBoard(FreeBoardVO freeBoardVO,HttpServletRequest request) throws Exception {
+		freeBoardService.writeFreeBoard(freeBoardVO,request);
 		return "redirect:writeFreeBoardResult";
 	}
 	// 자유게시판 글쓰기 결과

@@ -6,6 +6,66 @@
 > <!--/* 위 선언은 타임리프 레이아웃을 사용하기 위한 설정 : layout2.html 로 레이아웃 사용   */-->
 <head>
 <title>Brick Together</title>
+<title>promotion</title>
+<script src="https://cdn.tiny.cloud/1/in3wj4fn70vlu69j8jn5n71ldnhe4vsazh0f8vs5ocjpvpjn/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+$(function(){
+    let plugins = [
+        "advlist", "autolink", "lists", "link", "image", "charmap", "print", "preview", "anchor",
+        "searchreplace", "visualblocks", "code", "fullscreen", "insertdatetime", "media", "table",
+        "paste", "code", "help", "wordcount", "save"
+    ];
+    let edit_toolbar = 'formatselect fontselect fontsizeselect |'
+               + ' forecolor backcolor |'
+               + ' bold italic underline strikethrough |'
+               + ' alignjustify alignleft aligncenter alignright |'
+               + ' bullist numlist |'
+               + ' table tabledelete |'
+               + ' link image';
+
+    tinymce.init({
+    	language: "ko_KR", //한글판으로 변경
+        selector: '#editor',
+        height: 500,
+        menubar: false,
+        plugins: plugins,
+        toolbar: edit_toolbar,
+        
+        /*** image upload ***/
+        image_title: true,
+        automatic_uploads: true,
+        file_picker_types: 'image',
+
+        file_picker_callback: function (cb, value, meta) {
+            let input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+
+            input.onchange = function () {
+                let file = this.files[0];
+
+                let reader = new FileReader();
+                reader.onload = function () {
+                    
+                    let id = 'blobid' + (new Date()).getTime();
+                    let blobCache =  tinymce.activeEditor.editorUpload.blobCache;
+                    let base64 = reader.result.split(',')[1];
+                    let blobInfo = blobCache.create(id, file, base64);
+                    blobCache.add(blobInfo);
+
+                    
+                    cb(blobInfo.blobUri(), { title: file.name });
+                };
+                reader.readAsDataURL(file);
+            };
+            input.click();
+        },
+
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+    });
+
+});
+</script>
 </head>
 <!--/*  
 		thymeleaf layout을 이용하므로 body tag는 명시하지 않는다
@@ -19,10 +79,10 @@
 		<form th:action="@{/writeFreeBoard}" method="post" id="writeFreeBoard">
 			<input type="text" class="boardTitle" name="title" placeholder="제목을 입력해주세요." required="required" id="writeTitle">
 			<hr>
-			<input type="file" name="image"><br><br>
-			<pre><textarea class="textarea" name="content" placeholder="내용을 입력해주세요." required="required" id="writeContent"></textarea></pre>
+			<!-- <input type="file" name="image"><br><br> -->
+			<pre><textarea class="textarea" name="content" placeholder="내용을 입력해주세요." required="required" id="editor"></textarea></pre>
 			<button type="button" class="btn btn-danger" id="resetWriteFreeBoardBtn" style="float: right;">취소</button>
-			<button type="button" class="btn btn-success" id="writeFreeBoardBtn" style="float: right; margin-right: 10px;">등록</button>
+			<button type="button" class="btn btn-success" id="save" style="float: right; margin-right: 10px;">등록</button>
 		</form>
 	</div>
 	<script type="text/javascript">
@@ -33,15 +93,28 @@
 					location.href="findFreeBoardList";
 				}// if
 			})// click
-			$("#writeFreeBoardBtn").click(function() {
-				if($("#writeTitle").val().trim()==""||$("#writeContent").val().trim()==""){
-					alert("제목과 내용을 모두 입력해주세요.");
-					return false;
-				}// if
-				let writeResult=confirm("등록 하시겠습니까?");
-				if(writeResult){
-					$("#writeFreeBoard").submit();
-				}// if
+			$("#save").click(function() {
+			  let title = $("#writeTitle").val().trim();
+			  let content = tinymce.activeEditor.getContent();
+			  //현재 활성화된 TinyMCE 에디터의 인스턴스를 나타낸다
+			  //getContent()는 해당 에디터의 내용을 가져오는 메소드로, 
+			  //에디터에 입력된 텍스트나 HTML 내용을 반환한다.
+			  
+			  if(title == ""){
+				  alert("제목을 입력해주세요.");
+				  $("#writeTitle").focus();
+				  return;
+			  }
+			  if(content == ""){
+				  alert("내용을 입력해주세요.");
+				  tinymce.get('editor').focus(); //TinyMCE 라이브러리를 사용
+				  return;
+			  }
+			  let message = confirm("게시글을 등록하시겠습니까?");
+			  if(message){
+				  $("#writeFreeBoard").submit();
+			  }
+			  
 			});// click
 		});// ready
 	</script>

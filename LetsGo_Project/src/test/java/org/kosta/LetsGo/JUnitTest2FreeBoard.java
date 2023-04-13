@@ -50,7 +50,7 @@ public class JUnitTest2FreeBoard {
 		void writeFreeBoard() {
 		BTMemberVO btMemberVO=new BTMemberVO();
 		btMemberVO.setId("spring");
-		FreeBoardVO freeBoardVO=new FreeBoardVO(9, "제목9", "내용","이미지",btMemberVO);
+		FreeBoardVO freeBoardVO=new FreeBoardVO(189, "제목189", "내용189",btMemberVO);
 		int writeResult=freeBoardMapper.writeFreeBoard(freeBoardVO);
 		System.out.println("글쓰기 결과= "+writeResult);
 	}
