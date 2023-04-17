@@ -20,11 +20,12 @@ CREATE TABLE free_board(
 	content CLOB NOT NULL,
 	time_posted DATE DEFAULT SYSDATE,
 	hits NUMBER DEFAULT 0,
-	image VARCHAR2(1000),
+	image CLOB,
 	file_path VARCHAR2(100),
 	id VARCHAR2(100) NOT NULL,
 	CONSTRAINT free_board_fk FOREIGN KEY(id) REFERENCES bt_member(id)
 )
+ALTER TABLE free_board modify image CLOB
 CREATE SEQUENCE free_board_seq NOCACHE;
 DROP SEQUENCE free_board_seq;
 SELECT * FROM free_board;

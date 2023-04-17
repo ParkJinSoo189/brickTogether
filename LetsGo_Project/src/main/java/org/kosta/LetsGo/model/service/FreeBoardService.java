@@ -20,5 +20,5 @@ public interface FreeBoardService {
 	void updateFreeBoard(FreeBoardVO freeBoardVO);
 
 	String findFreeBoardListByKeyword(String keyword,Model model,Integer pageNo);
-	
+
 }

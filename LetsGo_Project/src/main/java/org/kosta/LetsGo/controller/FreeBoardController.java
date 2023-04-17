@@ -28,7 +28,8 @@ public class FreeBoardController {
 	}
 	// 자유게시판 글쓰기 폼
 	@RequestMapping("writeFreeBoardForm")
-	public String writeFreeBoardForm() {
+	public String writeFreeBoardForm(Model model,FreeBoardVO freeBoardVO) {
+		model.addAttribute("freeBoardVO", freeBoardVO);
 		return "freeBoard/writeFreeBoard-form";
 	}
 	// 자유게시판 글쓰기

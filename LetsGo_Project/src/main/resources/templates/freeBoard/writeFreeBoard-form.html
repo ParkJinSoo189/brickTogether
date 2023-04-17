@@ -19,6 +19,8 @@
 	<br>
 	<div class="container">
 		<form th:action="@{/writeFreeBoard}" method="post" id="writeFreeBoard">
+			<input type="hidden" name="id" th:value="${session.mvo.id}">
+			<input type="hidden" name="image" th:value="${freeBoardVO.image}" id="image">
 			<input type="text" class="boardTitle" name="title" placeholder="제목을 입력해주세요." required="required" id="writeTitle">
 			<hr>
 			<!-- <input type="file" name="image"><br><br> -->
@@ -78,7 +80,7 @@ $(function(){
     tinymce.init({
     	language: "ko_KR", //한글판으로 변경
         selector: '#editor',
-        height: 500,
+        height: 700, // textarea 길이조절
         menubar: false,
         plugins: plugins,
         toolbar: edit_toolbar,
@@ -103,6 +105,7 @@ $(function(){
                     let blobCache =  tinymce.activeEditor.editorUpload.blobCache;
                     let base64 = reader.result.split(',')[1];
                     let blobInfo = blobCache.create(id, file, base64);
+                    document.getElementById('image').value = blobInfo.base64();
                     blobCache.add(blobInfo);
 
                     
@@ -114,6 +117,11 @@ $(function(){
         },
 
         content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+    });
+    
+    $("#save").on("click", function(){
+        var content = tinymce.activeEditor.getContent();
+        console.log(content);
     });
 
 });

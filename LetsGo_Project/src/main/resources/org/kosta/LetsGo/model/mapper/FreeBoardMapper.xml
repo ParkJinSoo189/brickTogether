@@ -37,8 +37,8 @@
 	</select>
 	
 	<insert id="writeFreeBoard" parameterType="org.kosta.LetsGo.model.vo.FreeBoardVO">
-		INSERT INTO free_board(free_no,title,content,id)
-		VALUES(free_board_seq.nextval,#{title},#{content},#{btMemberVO.id})
+		INSERT INTO free_board(free_no,title,content,image,id)
+		VALUES(free_board_seq.nextval,#{title},#{content},#{image},#{btMemberVO.id})
 	</insert>
 	
 	<delete id="deleteFreeBoard" parameterType="int">
@@ -66,8 +66,8 @@
 	
 	<update id="freeBoardHits" parameterType="int">
 		UPDATE free_board SET hits=hits+1 WHERE free_no=#{value}
-	
 	</update>
+	
 </mapper>
 
 
