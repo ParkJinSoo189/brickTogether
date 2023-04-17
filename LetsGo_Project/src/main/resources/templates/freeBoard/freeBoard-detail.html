@@ -37,7 +37,11 @@
 		<th:block th:if="${freeBoardDetail.image}!=null">
 		<img th:src="@{/images/}+${freeBoardDetail.image}"><br><br>
 		</th:block>
-		<div class="contentDetail" th:text="${freeBoardDetail.content}"></div>
+		
+		<!-- "th:utext"는 Thymeleaf에서 텍스트를 출력할 때 사용되는 속성으로, 
+			텍스트를 HTML 인코딩하지 않고 원본 텍스트 그대로 출력하도록 지시합니다. -->
+		
+		<div class="contentDetail" th:utext="${freeBoardDetail.content}"></div>
 		<hr>
 		<h5 class="comment">댓글</h5>
 		<th:block th:each="freeCommentList: ${freeCommentList}">
